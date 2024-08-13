@@ -2,7 +2,7 @@ version: "3.3"
 services:
   build_env:
     build: "."
-    image: "dynamicmessagingbroker_dwi"
+    image: "shared_table_broker_dwi"
     volumes:
       - ../:/home/docker/workspace
       - ../.ssh/:/home/docker/.ssh

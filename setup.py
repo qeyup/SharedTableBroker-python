@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 
 
-import DynamicMessagingBroker
+import SharedTableBroker
 import setuptools
 
 
 if __name__ == '__main__':
     setuptools.setup(
-        name = 'DynamicMessagingBroker',
-        version = DynamicMessagingBroker.version,
-        packages = ["DynamicMessagingBroker"],
+        name = 'SharedTableBroker',
+        version = SharedTableBroker.version,
+        packages = ["SharedTableBroker"],
         install_requires = [
             "ServiceDiscovery"
         ],
@@ -18,5 +18,5 @@ if __name__ == '__main__':
         description = "",
         long_description_content_type = "text/markdown",
         long_description = "",
-        url = "https://github.com/qeyup/DynamicMessagingBroker-python"
+        url = "https://github.com/qeyup/SharedTableBroker-python"
     )

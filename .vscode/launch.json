@@ -1,0 +1,44 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "test",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "test.py",
+            "console": "integratedTerminal",
+            "args": [
+                "${input:test}"
+            ]
+        },
+        {
+            "name": "Example",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "example/example1.py",
+            "console": "integratedTerminal",
+            "args": [
+                "debug_key",
+                "data_debug"
+            ]
+        }
+    ],
+    "inputs": [
+        {
+            "id": "test",
+            "description": "Select test to debug",
+            "type": "pickString",
+            "options": [
+                "Test1.test1_startStop",
+                "Test1.test2_readUpdatesLastConnected",
+                "Test1.test3_readUpdatesFirstConnected",
+                "Test1.test4_readFirstMasterDisconected",
+                "Test1"
+            ],
+            "default": ""
+        }
+    ]
+}

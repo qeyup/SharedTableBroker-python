@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 
 ########################################
 # Docker image name
-#DB DOCKER_IMAGE_NAME=dynamicmessagingbroker_dwi
+#DB DOCKER_IMAGE_NAME=shared_table_broker_dwi
 
 # Docker build defined args
 #DB DOCKER_BUILD_ARGS=
@@ -279,11 +279,11 @@ RUN chmod a+x /etc/dockerbuild/BuildScript
 
 
 #--------------------------------------------------------------------------------------------------------------------------------
-# Image: dynamicmessagingbroker_dwi (./Dockerfile)
+# Image: shared_table_broker_dwi (./Dockerfile)
 
 # Build source '10.- Utilities/BuildExport.source'
-COPY ["10.- Utilities/BuildExport.source", "/tmp/dockerbuild/dynamicmessagingbroker_dwi/10.- Utilities/BuildExport.source"]
-RUN /etc/dockerbuild/BuildScript BuildExport "/tmp/dockerbuild/dynamicmessagingbroker_dwi/10.- Utilities" "BuildExport.source" False
+COPY ["10.- Utilities/BuildExport.source", "/tmp/dockerbuild/shared_table_broker_dwi/10.- Utilities/BuildExport.source"]
+RUN /etc/dockerbuild/BuildScript BuildExport "/tmp/dockerbuild/shared_table_broker_dwi/10.- Utilities" "BuildExport.source" False
 
 
 # Add Load image source
@@ -291,37 +291,37 @@ RUN echo "for source_file in \$(find -L /etc/dockerbuild/source.d -type f 2> /de
 
 
 # Build source '10.- Utilities/ImageExport.source'
-COPY ["10.- Utilities/ImageExport.source", "/tmp/dockerbuild/dynamicmessagingbroker_dwi/10.- Utilities/ImageExport.source"]
-RUN /etc/dockerbuild/BuildScript ImageExport "/tmp/dockerbuild/dynamicmessagingbroker_dwi/10.- Utilities" "ImageExport.source" False
+COPY ["10.- Utilities/ImageExport.source", "/tmp/dockerbuild/shared_table_broker_dwi/10.- Utilities/ImageExport.source"]
+RUN /etc/dockerbuild/BuildScript ImageExport "/tmp/dockerbuild/shared_table_broker_dwi/10.- Utilities" "ImageExport.source" False
 
 
 # Required sources '20.- Build layers/Sources'
-ADD ["https://github.com/junegunn/fzf/archive/master.zip", "/tmp/dockerbuild/dynamicmessagingbroker_dwi/20.- Build layers/fzf.zip"]
+ADD ["https://github.com/junegunn/fzf/archive/master.zip", "/tmp/dockerbuild/shared_table_broker_dwi/20.- Build layers/fzf.zip"]
 
 
 # Build step '20.- Build layers/20.- requirements.Dockerfile.sh'
-COPY ["20.- Build layers/20.- requirements.Dockerfile.sh", "/tmp/dockerbuild/dynamicmessagingbroker_dwi/20.- Build layers/20.- requirements.Dockerfile.sh"]
-RUN /etc/dockerbuild/BuildScript Dockerfile.sh "/tmp/dockerbuild/dynamicmessagingbroker_dwi/20.- Build layers" "20.- requirements.Dockerfile.sh" True
+COPY ["20.- Build layers/20.- requirements.Dockerfile.sh", "/tmp/dockerbuild/shared_table_broker_dwi/20.- Build layers/20.- requirements.Dockerfile.sh"]
+RUN /etc/dockerbuild/BuildScript Dockerfile.sh "/tmp/dockerbuild/shared_table_broker_dwi/20.- Build layers" "20.- requirements.Dockerfile.sh" True
 
 
 # Build step '20.- Build layers/25.- python.Dockerfile.sh'
-COPY ["20.- Build layers/25.- python.Dockerfile.sh", "/tmp/dockerbuild/dynamicmessagingbroker_dwi/20.- Build layers/25.- python.Dockerfile.sh"]
-RUN /etc/dockerbuild/BuildScript Dockerfile.sh "/tmp/dockerbuild/dynamicmessagingbroker_dwi/20.- Build layers" "25.- python.Dockerfile.sh" True
+COPY ["20.- Build layers/25.- python.Dockerfile.sh", "/tmp/dockerbuild/shared_table_broker_dwi/20.- Build layers/25.- python.Dockerfile.sh"]
+RUN /etc/dockerbuild/BuildScript Dockerfile.sh "/tmp/dockerbuild/shared_table_broker_dwi/20.- Build layers" "25.- python.Dockerfile.sh" True
 
 
 # Build step '20.- Build layers/30.- SystemConfig.Dockerfile.sh'
-COPY ["20.- Build layers/30.- SystemConfig.Dockerfile.sh", "/tmp/dockerbuild/dynamicmessagingbroker_dwi/20.- Build layers/30.- SystemConfig.Dockerfile.sh"]
-RUN /etc/dockerbuild/BuildScript Dockerfile.sh "/tmp/dockerbuild/dynamicmessagingbroker_dwi/20.- Build layers" "30.- SystemConfig.Dockerfile.sh" True
+COPY ["20.- Build layers/30.- SystemConfig.Dockerfile.sh", "/tmp/dockerbuild/shared_table_broker_dwi/20.- Build layers/30.- SystemConfig.Dockerfile.sh"]
+RUN /etc/dockerbuild/BuildScript Dockerfile.sh "/tmp/dockerbuild/shared_table_broker_dwi/20.- Build layers" "30.- SystemConfig.Dockerfile.sh" True
 
 
 # Build step '20.- Build layers/40.- Custom.Dockerfile.sh'
-COPY ["20.- Build layers/40.- Custom.Dockerfile.sh", "/tmp/dockerbuild/dynamicmessagingbroker_dwi/20.- Build layers/40.- Custom.Dockerfile.sh"]
-RUN /etc/dockerbuild/BuildScript Dockerfile.sh "/tmp/dockerbuild/dynamicmessagingbroker_dwi/20.- Build layers" "40.- Custom.Dockerfile.sh" True
+COPY ["20.- Build layers/40.- Custom.Dockerfile.sh", "/tmp/dockerbuild/shared_table_broker_dwi/20.- Build layers/40.- Custom.Dockerfile.sh"]
+RUN /etc/dockerbuild/BuildScript Dockerfile.sh "/tmp/dockerbuild/shared_table_broker_dwi/20.- Build layers" "40.- Custom.Dockerfile.sh" True
 
 
 # Build step '20.- Build layers/50.- vscode.Dockerfile.sh'
-COPY ["20.- Build layers/50.- vscode.Dockerfile.sh", "/tmp/dockerbuild/dynamicmessagingbroker_dwi/20.- Build layers/50.- vscode.Dockerfile.sh"]
-RUN /etc/dockerbuild/BuildScript Dockerfile.sh "/tmp/dockerbuild/dynamicmessagingbroker_dwi/20.- Build layers" "50.- vscode.Dockerfile.sh" True
+COPY ["20.- Build layers/50.- vscode.Dockerfile.sh", "/tmp/dockerbuild/shared_table_broker_dwi/20.- Build layers/50.- vscode.Dockerfile.sh"]
+RUN /etc/dockerbuild/BuildScript Dockerfile.sh "/tmp/dockerbuild/shared_table_broker_dwi/20.- Build layers" "50.- vscode.Dockerfile.sh" True
 
 
 # Raw append '20.- Build layers/60-. ContainerConfig.DockerfileAppend'
