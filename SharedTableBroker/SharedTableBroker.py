@@ -25,7 +25,7 @@ import weakref
 import uuid
 
 
-version = "0.1.0"
+version = "0.1.1"
 
 
 class constants():
@@ -317,6 +317,8 @@ class SharedTableBroker():
         self.__master_container.client_id = self.__client_container.client_id
         self.__client_container.discovery_client = ServiceDiscovery.client()
         self.__client_container.client = None
+        self.__client_container.master_ip = None
+        self.__client_container.master_port = None
 
         self.__master_container.master_clients = []
         self.__client_container.client_table_data = {}
@@ -531,13 +533,13 @@ class SharedTableBroker():
         while shared.run:
 
             # Discover master
-            master_ip, port = shared.discovery_client.getServiceIPAndPort(shared.domain, timeout=constants.CLIENT_DISCOVER_WAIT)
-            if master_ip != None and master_ip != "":
+            shared.master_ip, shared.master_port = shared.discovery_client.getServiceIPAndPort(shared.domain, timeout=constants.CLIENT_DISCOVER_WAIT)
+            if shared.master_ip != None and shared.master_ip != "":
 
-                debug.trace("[Broker] -> ", port)
+                debug.trace("[Broker] -> ", shared.master_port)
 
                 # Connect client
-                client = tcpClient(master_ip, port)
+                client = tcpClient(shared.master_ip, shared.master_port)
                 if not client.connect():
                     debug.trace("[Broker disconnection] -> ", client.local_port)
                     continue
@@ -796,9 +798,19 @@ class SharedTableBroker():
                     if client_id + entry_key not in added_entries:
                         table_map[client_id][entry_key] = self.__client_container.table_data_old[client_id][entry_key][0]
 
+            return table_map
+
 
     def isMaster(self) -> bool:
         return self.__master_container.discovery_daemon and self.__master_container.discovery_daemon.isMaster()
+
+
+    def masterIP(self) -> str:
+        return self.__client_container.master_ip
+
+
+    def masterPort(self) -> int:
+        return self.__client_container.master_port
 
 
     @property
