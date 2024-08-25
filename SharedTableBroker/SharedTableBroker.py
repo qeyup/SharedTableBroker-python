@@ -25,7 +25,7 @@ import weakref
 import uuid
 
 
-version = "0.1.1"
+version = "0.1.2"
 
 
 class constants():
@@ -290,7 +290,7 @@ class SharedTableBroker():
 
     instance_count = 0
 
-    def __init__(self, domain=constants.DEFAULT_DOMAIN, master=True):
+    def __init__(self, domain=constants.DEFAULT_DOMAIN, master=True, start=True):
 
         SharedTableBroker.instance_count += 1
 
@@ -299,8 +299,8 @@ class SharedTableBroker():
 
         self.__client_container.domain = domain
 
-        self.__master_container.run = True
-        self.__client_container.run = True
+        self.__master_container.run = False
+        self.__client_container.run = False
 
         if master:
             self.__master_container.master_listener = tcpListener()
@@ -331,6 +331,8 @@ class SharedTableBroker():
         self.__client_container.mutex = threading.RLock()
         self.__client_container.start_mutex = threading.Lock()
         self.__client_container.start_mutex.acquire()
+        self.__client_container.programed_wait = threading.Lock()
+        self.__client_container.programed_wait.acquire()
 
 
         # Callcaks
@@ -341,19 +343,18 @@ class SharedTableBroker():
 
         # Launch broker master
         if master:
-            self.__master_container.discovery_daemon.run()
             self.__broker_thread = threading.Thread(target=SharedTableBroker.__masterDaemonThread, daemon=True, args=[self.__master_container])
-            self.__broker_thread.start()
 
         else:
             self.__broker_thread = None
 
         # Launch broker client
         self.__client_thread = threading.Thread(target=SharedTableBroker.__clientDaemonThread, daemon=True, args=[self.__client_container])
-        self.__client_thread.start()
 
-        # Wait first conection
-        self.__client_container.start_mutex.acquire()
+
+        # Autostart
+        if start:
+            self.start()
 
 
     def __del__(self):
@@ -390,11 +391,9 @@ class SharedTableBroker():
 
     def __cleanOldEntries(shared):
 
-        time.sleep(constants.WAIT_TO_REMOVE_TIME)
-
-
-        with shared.mutex:
-            shared.table_data_old = {}
+        if not shared.programed_wait.acquire(blocking=True, timeout=constants.WAIT_TO_REMOVE_TIME):
+            with shared.mutex:
+                shared.table_data_old = {}
 
 
     def __masterConnectionThread(shared, connection):
@@ -530,6 +529,7 @@ class SharedTableBroker():
 
     def __clientDaemonThread(shared):
 
+        programed_clean = None
         while shared.run:
 
             # Discover master
@@ -600,6 +600,7 @@ class SharedTableBroker():
                 # Remove broker ip from list
                 debug.trace("Broker disconnection", shared.client.remote_ip)
 
+
                 # Thread safe
                 with shared.mutex:
 
@@ -612,7 +613,15 @@ class SharedTableBroker():
 
 
                 # Program old data remove
-                threading.Thread(target=SharedTableBroker.__cleanOldEntries, daemon=True, args=[shared]).start()
+                if shared.run:
+                    programed_clean = threading.Thread(target=SharedTableBroker.__cleanOldEntries, daemon=True, args=[shared])
+                    programed_clean.start()
+
+
+        # Wait programed clean
+        shared.programed_wait.release()
+        if programed_clean:
+            programed_clean.join()
 
 
     def __removeAllClientEntries(shared, client_id, entry_key=""):
@@ -728,6 +737,24 @@ class SharedTableBroker():
                 shared.client_table_data[instance_key] = entry
 
         return shared.client.send(bytearray(raw, encoding="utf8") + constants.END_OF_TX)
+
+
+    def start(self):
+
+        if not self.__client_container.run:
+
+            self.__client_container.run = True
+            self.__client_thread.start()
+
+            if self.__master_container.discovery_daemon:
+                self.__master_container.discovery_daemon.run()
+
+            if self.__broker_thread:
+                self.__master_container.run = True
+                self.__broker_thread.start()
+
+            # Wait first conection
+            self.__client_container.start_mutex.acquire()
 
 
     def stop(self):

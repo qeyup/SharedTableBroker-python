@@ -9,6 +9,7 @@ services:
       - /tmp/.X11-unix/:/tmp/.X11-unix/
     environment:
       - DISPLAY=:0
+    entrypoint: ["code", "-w", "/home/docker/workspace"]
     stdin_open: true 
     tty: true
     network_mode: "bridge"

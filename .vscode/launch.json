@@ -32,11 +32,12 @@
             "description": "Select test to debug",
             "type": "pickString",
             "options": [
-                "Test1.test1_startStop",
-                "Test1.test2_readUpdatesLastConnected",
-                "Test1.test3_readUpdatesFirstConnected",
-                "Test1.test4_readFirstMasterDisconected",
-                "Test1"
+                "SharedTableTest.test0_startStop",
+                "SharedTableTest.test1_DeteteInstance",
+                "SharedTableTest.test2_readUpdatesLastConnected",
+                "SharedTableTest.test3_readUpdatesFirstConnected",
+                "SharedTableTest.test4_readFirstMasterDisconected",
+                "SharedTableTest"
             ],
             "default": ""
         }

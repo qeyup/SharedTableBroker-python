@@ -20,6 +20,7 @@ import unittest
 import SharedTableBroker
 import threading
 import time
+import weakref
 
 
 class constants():
@@ -32,13 +33,29 @@ class container():
     pass
 
 
-class Test1(unittest.TestCase):
+class SharedTableTest(unittest.TestCase):
 
-    def test1_startStop(self):
+    def test0_startStop(self):
+        table_broker = SharedTableBroker.SharedTableBroker(constants.DOMAIN + "_0", start=False)
+        table_broker.start()
+        table_broker.stop()
 
-        table_broker = SharedTableBroker.SharedTableBroker(constants.DOMAIN + "_1")
-        table_broker.updateTableEntry("entry_key", ["A", "B", "C"])
-        del table_broker
+
+    def test1_DeteteInstance(self):
+
+        def instanceData():
+            weak_list = []
+            shared_list = []
+            for i in range(constants.TEST_INSTANCES):
+                table_broker = SharedTableBroker.SharedTableBroker(constants.DOMAIN + "_1")
+                table_broker.updateTableEntry("entry_key", ["A", "B", "C"])
+                weak_list.append(weakref.ref(table_broker))
+                shared_list.append(table_broker)
+            return weak_list
+
+        weak_list = instanceData()
+        for weak_prt in weak_list:
+            self.assertTrue(weak_prt() == None, "Instance is not deleted")
 
 
     def test2_readUpdatesLastConnected(self):
@@ -129,4 +146,4 @@ class Test1(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=2)
