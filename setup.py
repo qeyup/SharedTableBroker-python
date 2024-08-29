@@ -11,7 +11,7 @@ if __name__ == '__main__':
         version = SharedTableBroker.version,
         packages = ["SharedTableBroker"],
         install_requires = [
-            "ServiceDiscovery"
+            "ServiceDiscovery>=0.4.1"
         ],
         author = "Javier Moreno Garcia",
         author_email = "jgmore@gmail.com",

@@ -25,7 +25,7 @@ import weakref
 import uuid
 
 
-version = "0.1.2"
+version = "0.1.3"
 
 
 class constants():
@@ -823,6 +823,8 @@ class SharedTableBroker():
             for client_id in self.__client_container.table_data_old:
                 for entry_key in self.__client_container.table_data_old[client_id]:
                     if client_id + entry_key not in added_entries:
+                        if client_id not in table_map:
+                            table_map[client_id] = {}
                         table_map[client_id][entry_key] = self.__client_container.table_data_old[client_id][entry_key][0]
 
             return table_map
